@@ -1,26 +1,26 @@
 package httpHandler
 
 import (
-	"github.com/sudo-odner/LifeManagerBack/internal/controller/http/httpHandler/v1"
+	"github.com/sudo-odner/LifeManagerBack/internal/controller/http/httpHandler/HandlerIMPL"
+	"github.com/sudo-odner/LifeManagerBack/internal/controller/http/httpHandler/taskManager"
 	"github.com/sudo-odner/LifeManagerBack/internal/logger"
 	"github.com/sudo-odner/LifeManagerBack/internal/usecase"
 	"net/http"
 )
 
-type Handler struct {
-	log logger.Logger
-	u   usecase.UseCase
-}
+func Create(log *logger.Logger, u *usecase.UseCase) *http.ServeMux {
+	h := handlerIMPL.New(log, u)
 
-func New() *http.ServeMux {
 	mux := http.NewServeMux()
 	// Check status work handler server
+	// TODO: create middleware
 	// todo: mux.Handle("/health", func)
 	// todo: Authorization
-	// Version server
-	// TODO: create middleware
-	mux.Handle("/v1/", v1.Group())
+	mux.Handle("/health", http.HandlerFunc(h.Health))
 
-	// TODO: create middleware
+	// SERVER
+	// Handler Task manager
+	handlerTaskManager := taskManager.HandGroup(log, u, "/v1")
+	mux.Handle("/v1/", handlerTaskManager)
 	return mux
 }
