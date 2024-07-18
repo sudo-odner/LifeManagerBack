@@ -7,7 +7,7 @@ import (
 )
 
 type Logger struct {
-	Log *zerolog.Logger
+	*zerolog.Logger
 }
 
 func New(level string) *Logger {
@@ -30,7 +30,5 @@ func New(level string) *Logger {
 
 	skipFrameCount := -1
 	logger := zerolog.New(os.Stdout).With().Timestamp().CallerWithSkipFrameCount(zerolog.CallerSkipFrameCount + skipFrameCount).Logger()
-	return &Logger{
-		Log: &logger,
-	}
+	return &Logger{Logger: &logger}
 }

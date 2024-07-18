@@ -40,7 +40,6 @@ func (h *Handler) decodeIO(bodyIo io.ReadCloser) ([]byte, error) {
 	// Декодирование Body в json формат
 	bodyJSON, err := io.ReadAll(bodyIo)
 	if err != nil {
-		h.log.Log.Error().Err(err)
 		return nil, err
 	}
 	// Закрытие Body
